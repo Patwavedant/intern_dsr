@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style type="text/css">
+	@import url(https: //fonts.googleapis.com/css?family=Roboto:300);
+
+	* {
+		border: 0px !important;
+		font-family: "Roboto", sans-serif;
+	}
+
+
+	.form__div {
+		width: 100%;
+		background-color: grey;
+		display: inline-block;
+	}
+
+	.background {
+		background: url(bg.jpg)no-repeat 0% 0%/100% 100%;
+		padding: 83px;
+	}
+
+	.right__text {
+		text-align: center !important;
+		margin-bottom: 5px !important;
+	}
+
+	h1 {
+		color: blue;
+		text-align: center;
+	}
+
+	p {
+		font-family: verdana;
+		font-size: 20px;
+	}
+
+	.submit__btn {
+		font-family: sans-serif;
+		font-weight: 400;
+		padding: 15px 25px;
+		font-size: 18px;
+		border-radius: 46px;
+		background-color: black;
+		color: white;
+		letter-spacing: 3px;
+		text-decoration: underline;
+		transition: all 0.3s ease-in;
+	}
+
+	.submit__btn: hover {
+		color: red;
+		background: white;
+		text-decoration: underline;
+	}
+
+	div {
+		position: relative;
+		z-index: 1;
+		background-color: #fff;
+		max-width: 400px;
+		margin: 5px auto;
+		padding: 25px;
+		border: 1px solid black;
+	}
+
+	.shadow {
+		box-shadow: 0 0 30px 0 !important;
+		background-color: transparent;
+	}
+
+	.primary__status {
+		background-color: darkslategray !important;
+		color: #ffffff !important;
+		text-align: center;
+		font-size: 1.1em;
+	}
+
+	input {
+		outline: 0;
+		background: #f2f2f2;
+		width: 100%;
+		border: 0px 0px 1px 0px;
+		margin: 0 0 15px;
+		padding: 20px;
+		box-sizing: border-box;
+		font-size: 14px;
+	}
+
+	input[type="file"] {
+		height: 65px !important;
+	}
+
+	.button {
+		padding: 20px;
+		border: 1px solid #B0BEC5;
+		background-color: #B0BEC5;
+		color: white;
+	}
+
+	/*.button:before{
+text-align: right;
+content: "Drag and Drop files here!";
+}*/
+
+	.button:hover {
+		border: 1px solid #607D8B;
+		background-color: #607D8B;
+		box-shadow: 0 12px 25px -6px rgba(0, 0, 0, 0.2);
+		content: "Tap to choose file";
+
+	}
+
+	button {
+		font-family: "Roboto", sans-serif;
+		text-transform: uppercase;
+		outline: 0;
+		background: #5F9EA0;
+		width: 100%;
+		border: 1px;
+		padding: 25px;
+		color: #FFFFFF;
+		font-size: 14px;
+		cursor: pointer;
+	}
+
+	.footer-line p {
+		color: black;
+		font-family: sans-serif;
+		font-weight: 400;
+		font-size: 15px;
+		letter-spacing: 1px;
+	}
+
+	.footer-line p a {
+		color: #d45544;
+		text-decoration: none;
+	}
+
+</style>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+	function formReset() {
+		$('#userID').val('');
+		$('#file').val('');
+	}
+
+	console.log("Form Reset function:" + formReset());
+
+	// Read the file on form submit
+	function submitForm() {
+		file = $('#file')[0].files[0];
+
+		myfile = file.name;
+		//alert(file.name);
+		var ext = myfile.split('.').pop();
+		//alert(ext);
+		//return;
+		if (ext == 'xls' || ext == 'xlsx') {
+			console.log(file.name);
+		} else {
+			alert('Please enter a valid file type (.xls / .xlsx)');
+			return;
+		}
+
+		if ($('input#userID').val() == '') {
+			alert('Please enter an ID');
+			return;
+		}
+
+		if ($('input#userID').val() != '') {
+			var id1 = $('input#userID').val();
+			//alert(id1);
+
+			// get the userID
+			n = $('input#userID').val();
+			if ((id1 < 1 || id1 > 23) && (Number(n) === n && n % 1 == 0)) {
+				alert('Please enter a valid ID [e.g. 1 - 23]');
+				event.preventDefault();
+				return false;
+
+			}
+			//return;
+		}
+
+		//return;
+
+		showMessage('Uploading file..');
+		reader.readAsDataURL(file);
+	}
+
+	function showMessage(e) {
+		$('#progress').html(e);
+	}
+
+	var file,
+		reader = new FileReader()
+
+	// Upload the file to Google Drive
+	reader.onloadend = function(e) {
+		google.script.run.withSuccessHandler(showMessage).uploadFileToGoogleDrive(
+			e.target.result, file.name,
+			getUserName($('input#userID').val())
+		)
+	}
+
+	function getUserName(index_) {
+		var USER = [{
+				"Userid": "1",
+				"Username": "Abhinav Srivastava"
+			},
+			{
+				"Userid": "2",
+				"Username": "Bipin Sasidharan"
+			},
+			{
+				"Userid": "3",
+				"Username": "Dharmeshbhai Jadhav"
+			},
+			{
+				"Userid": "4",
+				"Username": "Drashti Gandhi"
+			},
+			{
+				"Userid": "5",
+				"Username": "Garima Jadhav"
+			},
+			{
+				"Userid": "6",
+				"Username": "Heena Bhatti"
+			},
+			{
+				"Userid": "7",
+				"Username": "Hinal Darji"
+			},
+			{
+				"Userid": "8",
+				"Username": "Indrajeet Sahu"
+			},
+			{
+				"Userid": "9",
+				"Username": "Kesha Patel"
+			},
+			{
+				"Userid": "10",
+				"Username": "Kunika Yadav"
+			},
+			{
+				"Userid": "11",
+				"Username": "Mayuri Gandhi"
+			},
+			{
+				"Userid": "12",
+				"Username": "Mehul Machhi"
+			},
+			{
+				"Userid": "13",
+				"Username": "Mudit Awasthi"
+			},
+			{
+				"Userid": "14",
+				"Username": "Navnit Chaudhary"
+			},
+			{
+				"Userid": "15",
+				"Username": "Neha Kumari"
+			},
+			{
+				"Userid": "16",
+				"Username": "Parth Chauhan"
+			},
+			{
+				"Userid": "17",
+				"Username": "Prachi Desai"
+			},
+			{
+				"Userid": "18",
+				"Username": "Premsing Vasava"
+			},
+			{
+				"Userid": "19",
+				"Username": "Rahul Mourya"
+			},
+			{
+				"Userid": "20",
+				"Username": "Shailendrakumar Gohil "
+			},
+			{
+				"Userid": "21",
+				"Username": "Shreya Joshi"
+			},
+			{
+				"Userid": "22",
+				"Username": "Shivali Salunkhe"
+			},
+			{
+				"Userid": "23",
+				"Username": "Vedant Patwa"
+			}
+		];
+		console.log(index_)
+		data = USER[index_ - 1];
+		return data.Username;
+	}
+
+</script>
+
+
+<head>
+	<base target="_top">
+</head>
+
+<body class="background">
+	<form>
+		<div class="shadow">
+			<!-- Show Progress -->
+			<div id="progress" class="primary__status">💻 Hello Geeks! Submit your DSR here</div>
+			<!-- Text input fields -->
+			<!-- <input id="name" type="text" placeholder="Your Name"> -->
+			<label for="userID" class="right__text">Your User ID: </label>
+			<input id="userID" type="number" placeholder="ID" min="1" max="23" required="required" value="Choose your file" autofocus />
+
+			<label for="file" class="right__text">Select Your File: </label>
+
+			<!-- File upload button -->
+			<input id="file" type="file" required="required" class="button" />
+
+			<!-- Form submit button -->
+			<button onclick="return submitForm();formRest()" type="button" class="submit__btn">Submit</button>
+			<p> &copy; <a target="_blank">DSR PORTAL</a> | Designed By INTERS
+		</div>
+	</form>
+</body>
+
+</html>
